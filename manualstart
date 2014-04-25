@@ -2,3 +2,65 @@
 #Manualstart V1.0
 #For PiMP by sling00 
 #For issues please post them to: https://github.com/sling00/manualstart
+
+
+function manualmenu() {
+$THELINE
+local miner_1="1. Scrypt"
+local miner_2="2. Scrypt-N (VERT)"
+local miner_3="3. SHA3-Keccak (Maxcoin)"
+local miner_4="4. Qubit"
+local miner_5="5. Scrypt-Jane"
+local miner_6="6. Groestl"
+local miner_7="7. Heavy (Experimental)"
+local miner_8="8. X11 (Darkcoin)"
+local miner_9="9. Scrypt Chacha (Not yet implemented)"
+echo "What would you like to do?"
+echo $miner_1
+echo $miner_2
+echo $miner_3
+echo $miner_4
+echo $miner_5
+echo $miner_6
+echo $miner_7
+echo $miner_8
+echo $miner_9
+echo "or q to exit"
+echo -n "Which one? 1-9: "
+	read MINERSELECT
+	if [ $MINERSELECT == q ];
+		then exit 0
+	else
+	echo -n "You selected $MINERSELECT Correct? Y/N: "
+	read MINER_CONTINUE
+	if [ $MINER_CONTINUE == y ];
+	then 
+	case $PMSELECTNUM in
+		1 )
+		run.scrypt
+		;;
+		2 )
+		run.scryptn
+		;;
+		3 )
+		run.keccak
+		;;
+		4 )
+		run.qubit
+		;;
+		5 )
+		run.sjane
+		;;
+		6 )
+		run.groestl
+		;;
+		7 )
+		run.heavy
+		;;
+		8 ) 
+		run.x11
+		;;
+		9 )
+		run.chacha
+		;;
+}
