@@ -2,8 +2,70 @@
 #Manualstart V1.0
 #For PiMP by sling00 
 #For issues please post them to: https://github.com/sling00/manualstart
+
+#Global Variables
+#Regular Expressions:
+PATHREGEX='/\w+/\w+(\-|\_||)\w+'
 MINERREGEX='\w+$'
+#conf paths, default & user must end in / or the script will fail.
+DEFAULTCONFPATH="/opt/pimp/defaultconfs/"
+USERCONFPATH="/opt/ifmi/"
+#Config file names.
+MINERCONF_1="cgminer.scrypt.conf"
+MINERCONF_2="cgminer.scryptn.conf"
+MINERCONF_3="cgminer.keccak.conf"
+MINERCONF_4="cgminer.qubit.conf"
+MINERCONF_5="cgminer.jane.conf"
+MINERCONF_6="cgminer.groestl.conf"
+MINERCONF_7="cgminer.heavy.conf"
+MINERCONF_8="cgminer.darkcoin.conf"
+MINERCONF_9="cgminer.chacha.conf" #Not yet implemented.
+#Miner paths
+MINERD1="/opt/sgminer/sgminer"
+MINERD2="/opt/sph-sgminer/sgminer"
+MINERD3="/opt/cgminer_heavy/cgminer"
+MINERD4="/opt/cgminer-3.7.2/cgminer"
+MINERD5="/opt/sgminer-scryptjane/sgminer"
+MINERD6="/opt/yacminer/yacminer"
+#Algo menu names
+
+MINER_1="Scrypt"
+MINER_2="Scrypt-N (VERT)"
+MINER_3="SHA3-Keccak (Maxcoin)"
+MINER_4="Qubit"
+MINER_5="Scrypt-Jane"
+MINER_6="Groestl"
+MINER_7="Heavy (Experimental)"
+MINER_8="X11 (Darkcoin)"
+MINER_9="Scrypt Chacha (Not yet implemented)"
+QUIT_NAME="Quit"
+#Unused testing code:
+#PATHREGEX="\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*"
+#echo options $OPTIONS
+#MINERPATH=$(echo $MINERD_1 | grep -P '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
+#MINERPATH=$(echo $MINERD1 | grep -oP '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
+#MINERPATH=$(echo $MINERD | grep -oP '/\w+/\w+(\-|\_||)\w+' )
+#local MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
+#echo $MINERPATH
+#echo "$MINER_2 $MINER_3 $MINER_4 $MINER_5 $MINER_6 $MINER_7 $MINER_8 $MINER_9'
+           #    if [ "$opt" = "$MINER_10" ]; then
+            #    echo "Exiting...."
+             #   exit
+             #  elif [ "$opt" = "$MINER_2" ]; then
+             #  echo Hello World
+             #  elif [ "$opt" = "$MINER_3" ]; then
+             #   echo "scrypt"
+             #  else
+             #   clear
+             #   echo bad option
+             #  fi
+           #done
+#end unused code.
+
+#test variables. remove before final release
+
 ALGO=x11
+#end test variables
 function f.defaultconf() {
  CONFDIR="/opt/pimp/defaultconfs/cgminer.$ALGO.conf"
 }
@@ -29,32 +91,10 @@ function startminer.1(){
 	 } 
 function manualmenu() {
 #$THELINE
-#PATHREGEX="\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*"
-PATHREGEX='/\w+/\w+(\-|\_||)\w+'
-local MINERD1="/opt/sgminer/sgminer"
-local MINERD2="/opt/sph-sgminer/sgminer"
-local MINERD3="/opt/cgminer_heavy/cgminer"
-local MINERD4="/opt/cgminer-3.7.2/cgminer"
-local MINERD5="/opt/sgminer-scryptjane/sgminer"
-local MINERD6="/opt/yacminer/yacminer"
-local MINER_1="Scrypt"
-local MINER_2="Scrypt-N (VERT)"
-local MINER_3="SHA3-Keccak (Maxcoin)"
-local MINER_4="Qubit"
-local MINER_5="Scrypt-Jane"
-local MINER_6="Groestl"
-local MINER_7="Heavy (Experimental)"
-local MINER_8="X11 (Darkcoin)"
-local MINER_9="Scrypt Chacha (Not yet implemented)"
-local MINER_10="Quit"
+
+
 OPTIONS="\"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$MINER_10\""
-#echo options $OPTIONS
-#MINERPATH=$(echo $MINERD_1 | grep -P '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
-#MINERPATH=$(echo $MINERD1 | grep -oP '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
-#MINERPATH=$(echo $MINERD | grep -oP '/\w+/\w+(\-|\_||)\w+' )
-#local MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
-#echo $MINERPATH
-#echo "$MINER_2 $MINER_3 $MINER_4 $MINER_5 $MINER_6 $MINER_7 $MINER_8 $MINER_9'
+
 echo 'Miners available: '
 eval set $OPTIONS
 PS3="Select a miner:"
@@ -67,7 +107,7 @@ PS3="Select a miner:"
 	#			echo "Starting $MINER_1 with $MINERPATH"
 				;;
 
-				$MINER_10 )
+				$QUIT_NAME )
 				echo "Exiting..."
 				exit 0
 				;;
@@ -80,81 +120,7 @@ PS3="Select a miner:"
 				;;
 			esac
 		done
-           #    if [ "$opt" = "$MINER_10" ]; then
-            #    echo "Exiting...."
-             #   exit
-             #  elif [ "$opt" = "$MINER_2" ]; then
-             #  echo Hello World
-             #  elif [ "$opt" = "$MINER_3" ]; then
-             #   echo "scrypt"
-             #  else
-             #   clear
-             #   echo bad option
-             #  fi
-           #done
 }
+#Actual work begins below....
 #Call the menu
 manualmenu
-
-function broken() {
-local miner_1="1. Scrypt"
-local miner_2="2. Scrypt-N (VERT)"
-local miner_3="3. SHA3-Keccak (Maxcoin)"
-local miner_4="4. Qubit"
-local miner_5="5. Scrypt-Jane"
-local miner_6="6. Groestl"
-local miner_7="7. Heavy (Experimental)"
-local miner_8="8. X11 (Darkcoin)"
-local miner_9="9. Scrypt Chacha (Not yet implemented)"
-echo "What would you like to do?"
-echo $miner_1
-echo $miner_2
-echo $miner_3
-echo $miner_4
-echo $miner_5
-echo $miner_6
-echo $miner_7
-echo $miner_8
-echo $miner_9
-echo "or q to exit"
-echo -n "Which one? 1-9: "
-	read MINERSELECT
-	if [ $MINERSELECT == q ];
-		then exit 0
-	else
-	echo -n "You selected $MINERSELECT Correct? Y/N: "
-	read MINER_CONTINUE
-	if [ $MINER_CONTINUE == y ];
-	then 
-	case $PMSELECTNUM in
-		1 )
-		run.scrypt
-		;;
-		2 )
-		run.scryptn
-		;;
-		3 )
-		run.keccak
-		;;
-		4 )
-		run.qubit
-		;;
-		5 )
-		run.sjane
-		;;
-		6 )
-		run.groestl
-		;;
-		7 )
-		run.heavy
-		;;
-		8 ) 
-		run.x11
-		;;
-		9 )
-		run.chacha
-		;;
-	esac
-fi
-fi
-}
