@@ -2,10 +2,101 @@
 #Manualstart V1.0
 #For PiMP by sling00 
 #For issues please post them to: https://github.com/sling00/manualstart
-
-
+MINERREGEX='\w+$'
+ALGO=x11
+function f.defaultconf() {
+ CONFDIR="/opt/pimp/defaultconfs/cgminer.$ALGO.conf"
+}
+function f.minerexec {
+ MINEREXEC=$(echo $MINERD | grep -oP $MINERREGEX ) 
+}
+function f.minerpath() {
+MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
+	}
+function f.minerconf() {
+MINERCONF="cgminer.$ALGO.conf"
+}
+function f.mineroptions(){
+MINEROPTIONS = "--"
+}
+function startminer.1(){
+	f.minerexec
+	#f.minerconf
+	MINERCONF="/opt/ifmi/cgminer.conf"
+	echo "Starting $MINER_1 mining with miner \" $MINEREXEC \" in $MINERPATH"
+	echo "cd $MINERPATH"
+	echo "./${MINEREXEC} -c $MINERCONF $MINEROPTIONS"
+	 } 
 function manualmenu() {
-$THELINE
+#$THELINE
+#PATHREGEX="\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*"
+PATHREGEX='/\w+/\w+(\-|\_||)\w+'
+local MINERD1="/opt/sgminer/sgminer"
+local MINERD2="/opt/sph-sgminer/sgminer"
+local MINERD3="/opt/cgminer_heavy/cgminer"
+local MINERD4="/opt/cgminer-3.7.2/cgminer"
+local MINERD5="/opt/sgminer-scryptjane/sgminer"
+local MINERD6="/opt/yacminer/yacminer"
+local MINER_1="Scrypt"
+local MINER_2="Scrypt-N (VERT)"
+local MINER_3="SHA3-Keccak (Maxcoin)"
+local MINER_4="Qubit"
+local MINER_5="Scrypt-Jane"
+local MINER_6="Groestl"
+local MINER_7="Heavy (Experimental)"
+local MINER_8="X11 (Darkcoin)"
+local MINER_9="Scrypt Chacha (Not yet implemented)"
+local MINER_10="Quit"
+OPTIONS="\"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$MINER_10\""
+#echo options $OPTIONS
+#MINERPATH=$(echo $MINERD_1 | grep -P '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
+#MINERPATH=$(echo $MINERD1 | grep -oP '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
+#MINERPATH=$(echo $MINERD | grep -oP '/\w+/\w+(\-|\_||)\w+' )
+#local MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
+#echo $MINERPATH
+#echo "$MINER_2 $MINER_3 $MINER_4 $MINER_5 $MINER_6 $MINER_7 $MINER_8 $MINER_9'
+echo 'Miners available: '
+eval set $OPTIONS
+PS3="Select a miner:"
+           select opt in "$@"; do
+               case "$opt" in
+               	$MINER_1 )
+				MINERD="$MINERD1"
+				f.minerpath
+				startminer.1
+	#			echo "Starting $MINER_1 with $MINERPATH"
+				;;
+
+				$MINER_10 )
+				echo "Exiting..."
+				exit 0
+				;;
+				* )
+			#	echo "$@"
+				clear
+				echo "bad option, try again"
+				#Recall the menu so it will show the options again
+				manualmenu
+				;;
+			esac
+		done
+           #    if [ "$opt" = "$MINER_10" ]; then
+            #    echo "Exiting...."
+             #   exit
+             #  elif [ "$opt" = "$MINER_2" ]; then
+             #  echo Hello World
+             #  elif [ "$opt" = "$MINER_3" ]; then
+             #   echo "scrypt"
+             #  else
+             #   clear
+             #   echo bad option
+             #  fi
+           #done
+}
+#Call the menu
+manualmenu
+
+function broken() {
 local miner_1="1. Scrypt"
 local miner_2="2. Scrypt-N (VERT)"
 local miner_3="3. SHA3-Keccak (Maxcoin)"
@@ -63,4 +154,7 @@ echo -n "Which one? 1-9: "
 		9 )
 		run.chacha
 		;;
+	esac
+fi
+fi
 }
