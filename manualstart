@@ -10,6 +10,8 @@ SCRIPT_VERSION=1.0.1
 #Regular Expressions:
 PATHREGEX='/\w+/\w+(\-|\_||)\w+'
 MINERREGEX='\w+$'
+#echo $MY_DIR
+#echo $CONFS
 #conf paths, default & user must end in / or the script will fail.
 DEFAULTCONFPATH="/opt/pimp/defaultconfs/"
 USERCONFPATH="/opt/ifmi/"
@@ -42,33 +44,7 @@ MINER_7="Heavy (Experimental)"
 MINER_8="X11 (Darkcoin)"
 MINER_9="Scrypt Chacha (Not yet implemented)"
 QUIT_NAME="Quit"
-#Unused testing code:
-#PATHREGEX="\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*"
-#echo options $OPTIONS
-#MINERPATH=$(echo $MINERD_1 | grep -P '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
-#MINERPATH=$(echo $MINERD1 | grep -oP '\/?[a-z][a-z0-9_]*\/[a-z][a-z0-9-_]*' ) #| echo "$MINERPATH")
-#MINERPATH=$(echo $MINERD | grep -oP '/\w+/\w+(\-|\_||)\w+' )
-#local MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
-#echo $MINERPATH
-#echo "$MINER_2 $MINER_3 $MINER_4 $MINER_5 $MINER_6 $MINER_7 $MINER_8 $MINER_9'
-           #    if [ "$opt" = "$MINER_10" ]; then
-            #    echo "Exiting...."
-             #   exit
-             #  elif [ "$opt" = "$MINER_2" ]; then
-             #  echo Hello World
-             #  elif [ "$opt" = "$MINER_3" ]; then
-             #   echo "scrypt"
-             #  else
-             #   clear
-             #   echo bad option
-             #  fi
-           #done
-#end unused code.
 
-#test variables. remove before final release
-
-#ALGO=x11
-#end test variables
 #Script functions.
 #Download function, called by checkdefaultconfs
 function f.scriptcreds() { 
@@ -77,24 +53,70 @@ if [ "$UID" -ne 0 ]
   then echo "ERROR: Please run as root"
   exit 1
   else
-  	if [ ! -e "/opt/ifmi/cgminer.scrypt.conf" ];
-  		then ln -s /opt/ifmi/cgminer.conf /opt/ifmi/cgminer.scrypt.conf
-  	else 
 $THELINE
 echo -e '\E[00;34m'"\033[1m        PiMP Miner manualstart / debugging tool Version $SCRIPT_VERSION\033[0m"
 echo -e '\E[00;31m'"\033[1m        Script by Sling00\033[0m"
 $THELINE
 echo -e '\E[00;31m'"\033[1m        NOTE: Some default confs do not work on all machines!\033[0m"
 $THELINE
-	fi
 fi
 }
+#manualstart conf path computation:
+function f.determineconfpath() {
+if [ ! -e /opt/pimp/manualstart.conf ]; then
+    MS_DIR=$(dirname $(readlink -f $0))
+	MS_CONF="$MS_DIR/manualstart.conf"
+	if [ -e $MS_CONF ]; then 
+	source $MS_CONF
+	else
+	f.createconf
+	fi 
+else
+	MS_DIR="/opt/pimp"
+	MS_CONF="$MS_DIR/manualstart.conf"
+	if [ -e $MS_CONF ]; then
+	source $MS_CONF
+	else
+	f.createconf 
+	fi
+fi
 
+if [ ! -e $MS_CONF ]; then
+	echo "ERROR: Couldn't locate manualstart.conf in either $(dirname $(readlink -f $0)) or /opt/pimp"
+	echo "Creating manualstart.conf with defaults."
+	sleep 2
+		if [ -e /opt/pimp ]; then 
+		touch /opt/pimp/manualstart.conf
+		f.createconf /opt/pimp/manualstart.conf
+		#need line to create conf with default settings inside.
+		echo "Created manualstart.conf in /opt/pimp" 
+	else 
+		SCRIPT_DIR=$(dirname $(readlink -f $0))
+		echo $SCRIPT_DIR
+	 	touch $SCRIPTDIR/manualstart.conf
+	 	f.createconf $SCRIPT_DIR/manualstart.conf
+	 	echo "Created manualstart.conf in $SCRIPT_DIR"
+	 	sleep 5
+	 fi
+	else
+	echo -e "conf found... $MS_CONF"
+
+fi	
+}
+f.createconf(){
+cat >$1 <<EOL
+#Config file for manualstart
+CONFS="default"
+DASHT="off"
+MINERDEBUG="off"
+USESCREEN="off"
+EOL
+}
+f.determineconfpath
 function download()
 {
 local URL=$2
 local destin=$1
-#local CLEANURL=`echo $URL | sed -r 's#.*\/([^.]+).*#\1#'`
 local CLEANURL=`echo $URL | sed -r 's#.*\/([^/]+).*#\1#'`
 echo "Downloading $CLEANURL"
 wget -O $destin  "$URL" 2>&1 | awk -v bsc=`tput cub1` '/[.] +[0-9]{2}?[0-9]?%/ {
@@ -115,70 +137,218 @@ END {printf "[=========================] 100%%\n"}'
 }
 #called via startminer.x 
 function f.minerexec { 
-MINEREXEC=$(echo $MINERD | grep -oP $MINERREGEX ) 
+if [ $USESCREEN = on ];
+	then 
+ 	MINEREXEC1=$(echo $MINERD | grep -oP $MINERREGEX )
+ 	MINEREXEC="screen -S PM-miner ./${MINEREXEC1} "
+	else
+	MINEREXEC1=$(echo $MINERD | grep -oP $MINERREGEX )
+	MINEREXEC="./${MINEREXEC1}"
+fi
 }
 #called by function manualmenu
 function f.minerpath() { 
 MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX ) 
 }
 
-function f.defaultconf() {
- CONFDIR="/opt/pimp/defaultconfs/cgminer.$ALGO.conf"
+function f.confspath() {
+	if [ $CONFS = default ]; then
+	CONFDIR="/opt/pimp/defaultconfs/"
+	else
+	CONFDIR="/opt/ifmi/" 
+fi
 }
-
+#Scrypt is lame so workaround needed
 function f.minerconf() {
+	if [ $ALGO = scrypt ];
+	then 
+	MINERCONF="cgminer.conf"
+	else
 	MINERCONF="cgminer.${ALGO}.conf"
+fi
 }
+#Mineroptions depending on selected options
 function f.mineroptions(){
-MINEROPTIONS = "--api-listen $"
+if [ $DASHT = on -a $MINERDEBUG = on ]; 
+	then
+	MINEROPTIONS="--api-listen -T --debug"
+	elif [ $DASHT = on ]; then
+	MINEROPTIONS="--api-listen -T "
+	else 
+		MINEROPTIONS="--api-listen"
+	fi
 }
 #Miner starting functions, called by manualmenu
 function f.startminer(){
+	f.mineroptions
+	f.confspath
 	f.minerexec
 	f.minerconf
-	#MINERCONF="/opt/ifmi/cgminer.conf"
-	echo "Starting $MINER_1 mining with miner \" $MINEREXEC \" in $MINERPATH"
-	echo "cd $MINERPATH"
-	echo "./${MINEREXEC} -c $MINERCONF $MINEROPTIONS"
-	 } 
-#sed -r "s/($k1 *= *\").*/\1$v1\"/" /opt/pimp/manualstart.conf
-function f.setoptions() {
-OPTIONS2="\"$OPT_1\" \"$OPT_2\" \"$OPT_3\" \"$OPT_4\""
-echo 'Change an option: '
+	echo "Starting $MINER_1 mining with miner \" $MINEREXEC1 \" in $MINERPATH"
+	cd $MINERPATH
+	${MINEREXEC} -c $CONFDIR$MINERCONF $MINEROPTIONS
+}
+function f.setoptionsmenu() {
+local OPT_1="Select whether to launch with User or Default config files"
+local OPT_2="Enable/Disable Miner option -T"
+local OPT_3="Enable/Disable Miner option --debug"
+local OPT_4="Enable/Disable launching miner in screen"
+local RETURN="Return to main menu"
+OPTIONS2="\"$OPT_1\" \"$OPT_2\" \"$OPT_3\" \"$OPT_4\" \"$RETURN\""
+$THELINE
+echo  "      Choose an option to change: "
+$THELINE
 eval set $OPTIONS2
-PS3="blah"
+PS3="Select an option: "
 	select opt in "$@"; do
 		case $opt in
+			$RETURN )
+			clear
+			break 2
+			;;
 			$OPT_1 )
-			echo "Configure which confs to use"
-			sed -r "s/($CONFS *= *\").*/\1$CONFSOPT\"/" /opt/pimp/manualstart.conf
+		if [ $CONFS == default ]; then
+			clear
+			sed -i -r "s/(CONFS*= *\").*/\1user\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Using user confs" 
+			$THELINE
+			source $MS_CONF
+		else
+			clear
+			sed -i -r "s/(CONFS*= *\").*/\1default\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Using default confs"
+			$THELINE
+			source $MS_CONF
+		fi
 			;;
 			$OPT_2 )
-			echo "Debug 1 on"
+		if [ $DASHT == off ]; then
+			clear
+			sed -i -r "s/(DASHT*= *\").*/\1on\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Starting miner with -T enabled (VERBOSE ON)" 
+			$THELINE
+			source $MS_CONF
+		else
+			clear
+			sed -i -r "s/(DASHT*= *\").*/\1off\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Miner starting WITHOUT -T (VERBOSE OFF)"
+			$THELINE
+			source $MS_CONF
+		fi
+			;;
+			$OPT_3 )
+		if [ $MINERDEBUG == off ]; then
+			clear
+			sed -i -r "s/(MINERDEBUG*= *\").*/\1on\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Starting will be started with --debug (SUPER VERBOSE ON)" 
+			$THELINE
+			source $MS_CONF
+		else
+			clear
+			sed -i -r "s/(MINERDEBUG*= *\").*/\1off\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Miner will be started WITHOUT --debug (SUPER VERBOSE OFF)"
+			$THELINE
+			source $MS_CONF
+		fi
+			;;
+			$OPT_4 )
+		if [ $USESCREEN == off ]; then
+			clear
+			sed -i -r "s/(USESCREEN*= *\").*/\1on\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Starting will be started with screen" 
+			$THELINE
+			source $MS_CONF
+		else
+			clear
+			sed -i -r "s/(USESCREEN*= *\").*/\1off\"/" $MS_CONF
+			$THELINE
+			echo "Setting updated: Miner will be started WITHOUT screen"
+			$THELINE
+			source $MS_CONF
+		fi
 			;;
 		esac
+		REPLY=""
+	done
 }
 function f.manualmenu() {
 #$THELINE
+while true 
+do
 OPTIONS="\"$RESETRUNOPTS\" \"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$QUIT_NAME\""
+PS3="Select a miner: "
 echo 'Miners available: '
+$THELINE
 eval set $OPTIONS
-PS3="Select a miner:"
            select opt in "$@"; do
+           	PS3="Select a miner: "
                case "$opt" in
                	$RESETRUNOPTS )
 			    echo "Function to reset options will be here."
-			    f.setoptions
+			    clear
+			    f.setoptionsmenu
 				;;
                	$MINER_1 )
 				MINERD="$MINERD1"
 				ALGO="scrypt"
-			#	f.minerconf
 				f.minerpath
 				f.startminer
-	#			echo "Starting $MINER_1 with $MINERPATH"
 				;;
-
+				$MINER_2 )
+				MINERD="$MINERD1"
+				ALGO="scryptn"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_3 )
+				MINERD="$MINERD3"
+				ALGO="keccak"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_4 )
+				MINERD="$MINERD2"
+				ALGO="qubit"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_5 )
+				MINERD="$MINERD5"
+				ALGO="jane"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_6 )
+				MINERD="$MINERD2"
+				ALGO="groestl"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_7 )
+				MINERD="$MINERD3"
+				ALGO="heavy"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_8 )
+				MINERD="$MINERD2"
+				ALGO="darkcoin"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_9 )
+				MINERD="$MINERD6"
+				ALGO="yac"
+				f.minerpath
+				f.startminer
+				;;
 				$QUIT_NAME )
 				echo "Exiting..."
 				exit 0
@@ -188,10 +358,12 @@ PS3="Select a miner:"
 				clear
 				echo "Invalid selection, try again"
 				#Recall the menu so it will show the options again
-				f.manualmenu
+				break
 				;;
 			esac
+			REPLY=""
 		done
+	done
 }
 function f.checkdefaultconfs (){
 	echo "   Checking if Default miner configs exist in /opt/pimp/defaultconfs"
@@ -213,8 +385,6 @@ function f.checkdefaultconfs (){
 	$THELINE
 	echo -e '\E[00;31m'"\033[1m        WARNING: Default configuration files not installed\033[0m"
 	echo -e '\E[00;31m'"\033[1m        You will be unable to use default config testing.!\033[0m"
-
-#	echo "Default configuration files not installed, you will be unable to use default config file testing."
 	$THELINE
 fi
 	else 
@@ -223,8 +393,10 @@ fi
 	fi
 }
 
-#Actual work begins below...
-#Call the menu
+#Actual work begins below... (REALLY LONG SCRIPT RIGHT?)
+#CREDITS! SUCH IMPORTANCE!
 f.scriptcreds
+#Do we haz confs?
 f.checkdefaultconfs
+#CALL THE MENU!
 f.manualmenu
