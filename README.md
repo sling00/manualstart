@@ -4,7 +4,7 @@ by sling00 ( sling00 @ irc.freenode.net #pimp )
 PiMP mining shell script to start miners from command line for debugging/testing.
 
 Installation:
-git clone https://github.com/sling00/manualstart.git\n
+git clone https://github.com/sling00/manualstart.git && 
 cd manualstart && ./installer.sh
 
 Usage: 
