@@ -2,8 +2,11 @@
 #Manualstart V1.0
 #For PiMP by sling00 
 #For issues please post them to: https://github.com/sling00/manualstart
-
+#Thanks to # FWishbringer 04/12/13 for the bulk of the download function that gives the sexy fluid progress bars ;).
 #Global Variables
+#Stylization stuffs
+THELINE='echo -====================================================================-'
+SCRIPT_VERSION=1.0.1
 #Regular Expressions:
 PATHREGEX='/\w+/\w+(\-|\_||)\w+'
 MINERREGEX='\w+$'
@@ -28,7 +31,7 @@ MINERD4="/opt/cgminer-3.7.2/cgminer"
 MINERD5="/opt/sgminer-scryptjane/sgminer"
 MINERD6="/opt/yacminer/yacminer"
 #Algo menu names
-
+RESETRUNOPTS="Reset miner run options"
 MINER_1="Scrypt"
 MINER_2="Scrypt-N (VERT)"
 MINER_3="SHA3-Keccak (Maxcoin)"
@@ -64,46 +67,115 @@ QUIT_NAME="Quit"
 
 #test variables. remove before final release
 
-ALGO=x11
+#ALGO=x11
 #end test variables
+#Script functions.
+#Download function, called by checkdefaultconfs
+function f.scriptcreds() { 
+clear
+if [ "$UID" -ne 0 ]
+  then echo "ERROR: Please run as root"
+  exit 1
+  else
+  	if [ ! -e "/opt/ifmi/cgminer.scrypt.conf" ];
+  		then ln -s /opt/ifmi/cgminer.conf /opt/ifmi/cgminer.scrypt.conf
+  	else 
+$THELINE
+echo -e '\E[00;34m'"\033[1m        PiMP Miner manualstart / debugging tool Version $SCRIPT_VERSION\033[0m"
+echo -e '\E[00;31m'"\033[1m        Script by Sling00\033[0m"
+$THELINE
+echo -e '\E[00;31m'"\033[1m        NOTE: Some default confs do not work on all machines!\033[0m"
+$THELINE
+	fi
+fi
+}
+
+function download()
+{
+local URL=$2
+local destin=$1
+#local CLEANURL=`echo $URL | sed -r 's#.*\/([^.]+).*#\1#'`
+local CLEANURL=`echo $URL | sed -r 's#.*\/([^/]+).*#\1#'`
+echo "Downloading $CLEANURL"
+wget -O $destin  "$URL" 2>&1 | awk -v bsc=`tput cub1` '/[.] +[0-9]{2}?[0-9]?%/ {
+percentage = substr($0,63,3)
+byfour = percentage / 4
+printf "["
+for (i=1; i<=25; i++)
+{
+  if (i <= byfour)
+     printf "="
+  else
+     printf " "
+}
+printf "] %3d%%",percentage
+for (i=1; i<= 32; i++) {printf bsc}
+}
+END {printf "[=========================] 100%%\n"}'
+}
+#called via startminer.x 
+function f.minerexec { 
+MINEREXEC=$(echo $MINERD | grep -oP $MINERREGEX ) 
+}
+#called by function manualmenu
+function f.minerpath() { 
+MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX ) 
+}
+
 function f.defaultconf() {
  CONFDIR="/opt/pimp/defaultconfs/cgminer.$ALGO.conf"
 }
-function f.minerexec {
- MINEREXEC=$(echo $MINERD | grep -oP $MINERREGEX ) 
-}
-function f.minerpath() {
-MINERPATH=$(echo $MINERD | grep -oP $PATHREGEX )
-	}
+
 function f.minerconf() {
-MINERCONF="cgminer.$ALGO.conf"
+	MINERCONF="cgminer.${ALGO}.conf"
 }
 function f.mineroptions(){
-MINEROPTIONS = "--"
+MINEROPTIONS = "--api-listen $"
 }
-function startminer.1(){
+#Miner starting functions, called by manualmenu
+function f.startminer(){
 	f.minerexec
-	#f.minerconf
-	MINERCONF="/opt/ifmi/cgminer.conf"
+	f.minerconf
+	#MINERCONF="/opt/ifmi/cgminer.conf"
 	echo "Starting $MINER_1 mining with miner \" $MINEREXEC \" in $MINERPATH"
 	echo "cd $MINERPATH"
 	echo "./${MINEREXEC} -c $MINERCONF $MINEROPTIONS"
 	 } 
-function manualmenu() {
+#sed -r "s/($k1 *= *\").*/\1$v1\"/" /opt/pimp/manualstart.conf
+function f.setoptions() {
+OPTIONS2="\"$OPT_1\" \"$OPT_2\" \"$OPT_3\" \"$OPT_4\""
+echo 'Change an option: '
+eval set $OPTIONS2
+PS3="blah"
+	select opt in "$@"; do
+		case $opt in
+			$OPT_1 )
+			echo "Configure which confs to use"
+			sed -r "s/($CONFS *= *\").*/\1$CONFSOPT\"/" /opt/pimp/manualstart.conf
+			;;
+			$OPT_2 )
+			echo "Debug 1 on"
+			;;
+		esac
+}
+function f.manualmenu() {
 #$THELINE
-
-
-OPTIONS="\"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$QUIT_NAME\""
-
+OPTIONS="\"$RESETRUNOPTS\" \"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$QUIT_NAME\""
 echo 'Miners available: '
 eval set $OPTIONS
 PS3="Select a miner:"
            select opt in "$@"; do
                case "$opt" in
+               	$RESETRUNOPTS )
+			    echo "Function to reset options will be here."
+			    f.setoptions
+				;;
                	$MINER_1 )
 				MINERD="$MINERD1"
+				ALGO="scrypt"
+			#	f.minerconf
 				f.minerpath
-				startminer.1
+				f.startminer
 	#			echo "Starting $MINER_1 with $MINERPATH"
 				;;
 
@@ -114,13 +186,45 @@ PS3="Select a miner:"
 				* )
 			#	echo "$@"
 				clear
-				echo "bad option, try again"
+				echo "Invalid selection, try again"
 				#Recall the menu so it will show the options again
-				manualmenu
+				f.manualmenu
 				;;
 			esac
 		done
 }
-#Actual work begins below....
+function f.checkdefaultconfs (){
+	echo "   Checking if Default miner configs exist in /opt/pimp/defaultconfs"
+	if [ ! -e "/opt/pimp/defaultconfs/cgminer.conf" ];
+	then
+	echo -n "Default miner configs not found, do you want to install them? y/n: "
+	read DEFAULTCONF_CONTINUE
+	if [ $DEFAULTCONF_CONTINUE == y ]; then
+		$THELINE
+		download /tmp/defaultconfs.tar.bz2 http://hackin.yourshell.net/manualstart/defaultconfs.tar.bz2
+		echo "Creating directory /opt/pimp/defaultconfs"
+		mkdir /opt/pimp/defaultconfs
+		echo "Extracting default miner configurations to /opt/pimp/defaultconfs/"
+		tar jxvpf /tmp/defaultconfs.tar.bz2 -C /opt/pimp/defaultconfs > /tmp/pmupdate.log
+		echo "Update completed. Please rerun this script to continue."
+		rm /tmp/defaultconfs.tar.bz2
+		exit 0
+	else
+	$THELINE
+	echo -e '\E[00;31m'"\033[1m        WARNING: Default configuration files not installed\033[0m"
+	echo -e '\E[00;31m'"\033[1m        You will be unable to use default config testing.!\033[0m"
+
+#	echo "Default configuration files not installed, you will be unable to use default config file testing."
+	$THELINE
+fi
+	else 
+	echo "      Default configuration files found, continuing!"
+	$THELINE
+	fi
+}
+
+#Actual work begins below...
 #Call the menu
-manualmenu
+f.scriptcreds
+f.checkdefaultconfs
+f.manualmenu
