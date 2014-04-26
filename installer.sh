@@ -20,4 +20,4 @@ if [ -e /opt/pimp/manualstart.conf ];
 	Echo "No old conf to backup, continuing."
 fi
 cp ./manualstart.conf /opt/pimp/manualstart.conf
-echo "Finished, you can now start the script by typing "manualstart".
+echo "Finished, you can now start the script by typing "manualstart"."
