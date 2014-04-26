@@ -6,8 +6,10 @@
 echo "Installing into /opt/pimp"
 if [ -e /opt/pimp/manualstart ];
 	then 
+	echo "Backing up old manualstart"
 	mv /opt/pimp/manualstart /opt/pimp/manualstart.bak
 	else
+	echo "No old manualstart to backup...continuing"
 fi
 	cp ./manualstart /opt/pimp/manualstart
 if [ -e /opt/pimp/manualstart.conf ];
@@ -15,6 +17,7 @@ if [ -e /opt/pimp/manualstart.conf ];
 	echo "Backing up your old manualstart.conf to /opt/pimp/manualstart.conf.bak"
 	mv /opt/pimp/manualstart.conf /opt/pimp/manualstart.bak
 	else
+	Echo "No old conf to backup, continuing."
 fi
 cp ./manualstart.conf /opt/pimp/manualstart.conf
 echo "Finished, you can now start the script by typing "manualstart".
