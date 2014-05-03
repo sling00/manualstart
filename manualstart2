@@ -6,7 +6,20 @@ my $THELINE = (print "-================================================-\n");
 $THELINE;
 my $continue = <>; chomp $continue;
 	if ($continue =~ m/y(es)?/i)  {
-	print "GOING AHEAD!";
+	print "GOING AHEAD\n";
+	&domenu;
 } else {
 	print "Exiting....";
 	}
+sub domenu {
+print "test\n";
+my @algos = qw(scrypt scryptn keccak darkcoin qubit heavy groestl jackpot);
+foreach $algo (@algos) {
+	$algo = "\t . $algo";
+	$algo .= "\n";
+	}
+print "$algo";
+foreach $index ( 0 .. $#rocks ) {
+print "$index: $rocks[$index]\n";
+}
+}
