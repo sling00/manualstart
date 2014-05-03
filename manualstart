@@ -198,6 +198,7 @@ OPTIONS2="\"$OPT_1\" \"$OPT_2\" \"$OPT_3\" \"$OPT_4\" \"$RETURN\""
 $THELINE
 echo  "      Choose an option to change: "
 $THELINE
+echo "Current Setting:    Option to Change"
 eval set $OPTIONS2
 PS3="Select an option: "
 	select opt in "$@"; do
