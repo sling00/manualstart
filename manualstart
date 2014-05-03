@@ -199,7 +199,11 @@ $THELINE
 echo  "      Choose an option to change: "
 $THELINE
 echo "Current Setting:    Option to Change"
-eval set $OPTIONS2
+echo "[$CONFS] $OPT_1"
+echo "[$DASHT] $OPT_2"
+echo "[$MINERDEBUG] $OPT_3"
+echo "[$USESCREEN] $OPT_4"
+#eval set $OPTIONS2
 PS3="Select an option: "
 	select opt in "$@"; do
 		case $opt in
