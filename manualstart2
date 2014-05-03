@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+#Manualstart V2.0 Perl edition! 
+#Globals
+my $THELINE = (print "-================================================-\n");
+
+$THELINE;
+my $continue = <>; chomp $continue;
+	if ($continue =~ m/y(es)?/i)  {
+	print "GOING AHEAD!";
+} else {
+	print "Exiting....";
+	}
