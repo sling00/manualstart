@@ -245,7 +245,7 @@ PS3="Select an option: "
 			clear
 			sed -i -r "s/(MINERDEBUG*= *\").*/\1on\"/" $MS_CONF
 			$THELINE
-			echo "Setting updated: Starting will be started with --debug (SUPER VERBOSE ON)" 
+			echo "Setting updated: Miner will be started with --debug (SUPER VERBOSE ON)" 
 			$THELINE
 			source $MS_CONF
 		else
