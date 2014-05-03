@@ -189,10 +189,10 @@ function f.startminer(){
 	${MINEREXEC} -c $CONFDIR$MINERCONF $MINEROPTIONS
 }
 function f.setoptionsmenu() {
-local OPT_1="[$CONFS]Select whether to launch with User or Default config files"
-local OPT_2="[$DASHT]Enable/Disable Miner option -T"
-local OPT_3="[$MINERDEBUG]Enable/Disable Miner option --debug"
-local OPT_4="[$USESCREEN]Enable/Disable launching miner in screen"
+local OPT_1="Select whether to launch with User or Default config files"
+local OPT_2="Enable/Disable Miner option -T"
+local OPT_3="Enable/Disable Miner option --debug"
+local OPT_4="Enable/Disable launching miner in screen"
 local RETURN="Return to main menu"
 OPTIONS2="\"$OPT_1\" \"$OPT_2\" \"$OPT_3\" \"$OPT_4\" \"$RETURN\""
 $THELINE
