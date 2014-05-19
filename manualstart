@@ -6,7 +6,7 @@
 #Global Variables
 #Stylization stuffs
 THELINE='echo -====================================================================-'
-SCRIPT_VERSION=1.0.1
+SCRIPT_VERSION=1.0.2
 #Regular Expressions:
 PATHREGEX='/\w+/\w+(\-|\_||)\w+'
 MINERREGEX='\w+$'
@@ -23,7 +23,7 @@ MINERCONF_4="cgminer.qubit.conf"
 MINERCONF_5="cgminer.jane.conf"
 MINERCONF_6="cgminer.groestl.conf"
 MINERCONF_7="cgminer.heavy.conf"
-MINERCONF_8="cgminer.darkcoin.conf"
+MINERCONF_8="cgminer.x11.conf"
 MINERCONF_9="cgminer.chacha.conf" #Not yet implemented.
 #Miner paths
 MINERD1="/opt/sgminer/sgminer"
@@ -325,7 +325,7 @@ eval set $OPTIONS
 				f.startminer
 				;;
 				$MINER_5 )
-				MINERD="$MINERD5"
+				MINERD="$MINERD6"
 				ALGO="jane"
 				f.minerpath
 				f.startminer
@@ -344,7 +344,7 @@ eval set $OPTIONS
 				;;
 				$MINER_8 )
 				MINERD="$MINERD2"
-				ALGO="darkcoin"
+				ALGO="x11"
 				f.minerpath
 				f.startminer
 				;;
