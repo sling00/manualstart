@@ -296,7 +296,7 @@ function f.manualmenu() {
 #$THELINE
 while true 
 do
-OPTIONS="\"$RESETRUNOPTS\" \"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$QUIT_NAME\""
+OPTIONS="\"$RESETRUNOPTS\" \"$MINER_1\" \"$MINER_2\" \"$MINER_3\" \"$MINER_4\" \"$MINER_5\" \"$MINER_6\" \"$MINER_7\" \"$MINER_8\" \"$MINER_9\" \"$MINER_10\" \"$MINER_11\" \"$MINER_12\" \"$QUIT_NAME\""
 PS3="Select a miner: "
 echo 'Miners available: '
 $THELINE
