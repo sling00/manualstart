@@ -1,12 +1,12 @@
 #!/bin/bash
-#Manualstart V1.0
+#Manualstart V1.0.4
 #For PiMP by sling00 
 #For issues please post them to: https://github.com/sling00/manualstart
 #Thanks to # FWishbringer 04/12/13 for the bulk of the download function that gives the sexy fluid progress bars ;).
 #Global Variables
 #Stylization stuffs
 THELINE='echo -====================================================================-'
-SCRIPT_VERSION=1.0.3
+SCRIPT_VERSION=1.0.4
 #Regular Expressions:
 PATHREGEX='/\w+/\w+(\-|\_||)\w+'
 MINERREGEX='\w+$'
@@ -24,9 +24,11 @@ MINERCONF_5="cgminer.jane.conf"
 MINERCONF_6="cgminer.groestl.conf"
 MINERCONF_7="cgminer.heavy.conf"
 MINERCONF_8="cgminer.x11.conf"
-MINERCONF_9="cgminer.chacha.conf" #Not yet implemented.
-MINERCONF_10="cgminer.x11mod.conf"
-MINERCONF_11="cgminer.jackpot.conf"
+MINERCONF_9="cgminer.x11mod.conf"
+MINERCONF_10="cgminer.x13.conf"
+MINERCONF_11="cgminer.yac.conf" #Not yet implemented.
+MINERCONF_12="cgminer.jackpot.conf"
+
 #Miner paths
 MINERD1="/opt/sgminer/sgminer"
 MINERD2="/opt/sph-sgminer/sgminer"
@@ -47,8 +49,9 @@ MINER_6="Groestl"
 MINER_7="Heavy (Experimental)"
 MINER_8="X11 (Darkcoin) SPH-SGMINER VANILLA"
 MINER_9="X11 (Darkcoin) Open source optimized miner"
-MINER_10="Scrypt Chacha (Not yet implemented)"
-MINER_11="Jackpotcoin (Adv SHA3)"
+MINER_10="X13"
+MINER_11="Scrypt Chacha (Not yet implemented)"
+MINER_12="Jackpotcoin (Adv SHA3)"
 QUIT_NAME="Quit"
 
 #Script functions.
@@ -361,12 +364,18 @@ eval set $OPTIONS
 				f.startminer
 				;;
 				$MINER_10 )
+				MINERD="$MINERD8"
+				ALGO="x13"
+				f.minerpath
+				f.startminer
+				;;
+				$MINER_11 )
 				MINERD="$MINERD6"
 				ALGO="yac"
 				f.minerpath
 				f.startminer
 				;;
-				$MINER_11 )
+				$MINER_12 )
 				MINERD="$MINERD7"
 				ALGO="jackpot"
 				f.minerpath
