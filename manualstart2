@@ -22,8 +22,8 @@ my $json;
 }
 my $data = decode_json($json);
 # Output to screen one of the values read
-print "Debug is: " .
-      $data->{'Settings'}->{'Debug'}->[0] . "n";
+#print "Debug is: " .
+#      $data->{'Settings'}->{'Debug'}->[0] . "n";
 # Modify the value, and write the output file as json
 #$data->{'boss'}->{'Hobbies'}->[0] = "Swimming";
 #open my $fh, ">", "data_out.json";
@@ -61,8 +61,7 @@ sub optionsmenu {
 
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
-	print "Debug is: " .
-      $data->{'Settings'}->{'Debug'}->[0] . "n";
+	print "Debug is: " . $data->{'Settings'}->{'Debug'}->[0] . "n";
 	if ($coption = 1 ) {
 		print "\nTurning $coption on";
 		&optionsmenu;
