@@ -19,9 +19,6 @@ sub startup {
 	$THELINE;
 	print "Poolmanager Manual mining starter & profile tester\n";
 	$THELINE;
-	print "...." ;
-	sleep 5;
-	print $clear_screen;
 }	
 &startup;
 
