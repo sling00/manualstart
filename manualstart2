@@ -5,27 +5,8 @@ use strict;
 require '/opt/ifmi/pm-common.pl';
 use Term::ANSIScreen qw(cls);
 use YAML qw( DumpFile LoadFile );
-
-
-
-use JSON::XS;
+use Config::Simple;
  
-my $json;
-{
-  local $/; #Enable 'slurp' mode
-  open my $fh, "<", "/root/manualstart/manualstart2.conf";
-  $json = <$fh>;
-  close $fh;
-}
-my $data = decode_json($json);
-# Output to screen one of the values read
-#print "Debug is: " .
-#      $data->{'Settings'}->{'Debug'}->[0] . "n";
-# Modify the value, and write the output file as json
-#$data->{'boss'}->{'Hobbies'}->[0] = "Swimming";
-#open my $fh, ">", "data_out.json";
-#print $fh encode_json($data);
-#close $fh;
 my $conf = &getConfig;
 my %conf = %{$conf};
 my $conffile = "/opt/ifmi/poolmanager.conf";
@@ -36,6 +17,7 @@ sub THELINE {
 my $clear_screen = cls();
 
 
+my $msconf = new Config::Simple('manualstart2.conf');
 
 sub readconf {
   my $msconffile = '/opt/pimp/manualstart.conf';
@@ -55,10 +37,11 @@ sub startup {
 
 sub optionsmenu {
 	print "Options\n";
-
+my $dasht = $cfg->param('dasht');
+	print "Dasht is $dasht";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
-	print "Debug is: " . $data->{'Settings'}->{'Debug'}->[0] . "n";
+	
 	if ($coption = 1 ) {
 		print "\nTurning $coption on";
 		&optionsmenu;
