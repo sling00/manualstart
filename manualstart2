@@ -12,8 +12,8 @@ my $THELINE = (print "-================================================-\n");
 
 
 sub startup {
-	$THELINE
-	print "Poolmanager Manual mining starter & profile tester\n"
+	$THELINE;
+	print "Poolmanager Manual mining starter & profile tester\n";
 }	
 &startup;
 my $continue = <>; chomp $continue;
