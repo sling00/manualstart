@@ -10,7 +10,11 @@ my $conffile = "/opt/ifmi/poolmanager.conf";
 my $THELINE = (print "-================================================-\n");
 
 
-$THELINE;
+
+sub startup {
+	$THELINE
+	print "Poolmanager Manual mining starter & profile tester\n"
+}	
 my $continue = <>; chomp $continue;
 	if ($continue =~ m/y(es)?/i)  {
 	print "GOING AHEAD\n";
