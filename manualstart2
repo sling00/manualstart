@@ -9,23 +9,25 @@ my $conf = &getConfig;
 my %conf = %{$conf};
 my $conffile = "/opt/ifmi/poolmanager.conf";
 #Globals
-my $THELINE = (print "-================================================-\n");
+sub theline {
+	print "-================================================-\n";
+}
 my $clear_screen = cls();
 
 
 
 
 sub startup {
-	$THELINE;
+	&THELINE;
 	print "Poolmanager Manual mining starter & profile tester\n";
-	$THELINE;
+	&THELINE;
 }	
 &startup;
 
 sub mainmenu {
-	$THELINE;
+	&THELINE;
 	print "Select an option from the menu below:\n";
-	$THELINE;
+	&THELINE;
 	print "1. Change options\t 7.Start Heavy\n";
 	print "2. scrypt\t  8. X11 (SPH-SGminer)\n";
 	print "3. scrypt-n\t 9. X11 (X11mod miner)\n";
