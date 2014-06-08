@@ -4,7 +4,31 @@ use warnings;
 use strict;
 require '/opt/ifmi/pm-common.pl';
 use Term::ANSIScreen qw(cls);
+use YAML qw( DumpFile LoadFile );
+binmode STDOUT, ":utf8";
+use utf8;
+ 
 
+use JSON;
+
+use JSON;
+ 
+my $json;
+{
+  local $/; #Enable 'slurp' mode
+  open my $fh, "<", "manualstart2.conf";
+  $json = <$fh>;
+  close $fh;
+}
+my $data = decode_json($json);
+# Output to screen one of the values read
+print "Debug is: " .
+      $data->{'Settings'}->{'Debug'}->[0] . "n";
+# Modify the value, and write the output file as json
+#$data->{'boss'}->{'Hobbies'}->[0] = "Swimming";
+#open my $fh, ">", "data_out.json";
+#print $fh encode_json($data);
+#close $fh;
 my $conf = &getConfig;
 my %conf = %{$conf};
 my $conffile = "/opt/ifmi/poolmanager.conf";
@@ -16,7 +40,15 @@ my $clear_screen = cls();
 
 
 
-
+sub readconf {
+  my $msconffile = '/opt/pimp/manualstart.conf';
+  if (! -e $msconffile) {
+    exec('/usr/lib/cgi-bin/config.pl');
+  } 
+  my $c;
+  $c = LoadFile($msconffile);
+  return($c);
+}
 sub startup {
 	print $clear_screen;
 	&THELINE;
@@ -26,14 +58,21 @@ sub startup {
 
 sub optionsmenu {
 	print "Options\n";
+
+	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
 	if ($coption = 1 ) {
 		print "\nTurning $coption on";
+		&optionsmenu;
 	}
 	elsif ($coption = 2 ) {
 		print "\nTurning $coption off";
-	} else {
-		print "Invalid selection. Try again.\n"; &mainmenu;
+		&optionsmenu;
+	}
+	elsif ($coption = m/d(one)?/i) {
+		&mainmenu;
+	}else {
+		print "\nInvalid selection. Try again.\n"; &optionsmenu;
 	}
 
 }
