@@ -61,6 +61,8 @@ sub optionsmenu {
 
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
+	print "Debug is: " .
+      $data->{'Settings'}->{'Debug'}->[0] . "n";
 	if ($coption = 1 ) {
 		print "\nTurning $coption on";
 		&optionsmenu;
