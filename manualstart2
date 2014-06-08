@@ -36,7 +36,7 @@ sub mainmenu {
 	print "5. Quark\t 11. Scrypt ChaCha\n";
 	print "6. Scrypt-Jane\t 12. Jackpotcoin\n";
 	print "q - Quit\n";
-	my $choice = <>;
+	print "My Choice: "; my $choice = <>;
 	if ($choice =~ 1) { &optionsmenu;
 	}
 	elsif ($choice =~ m/q(uit)?/i) {
