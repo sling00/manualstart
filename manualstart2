@@ -23,8 +23,20 @@ sub startup {
 	print "Poolmanager Manual mining starter & profile tester\n";
 	&THELINE;
 }	
-&startup;
 
+sub optionsmenu {
+	print "Options\n";
+	print "Change option #: "; my $coption = <>;
+	if ($coption = 1 ) {
+		print "\nTurning $coption on";
+	}
+	elsif ($coption = 2 ) {
+		print "\nTurning $coption off";
+	} else {
+		print "Invalid selection. Try again.\n"; &mainmenu;
+	}
+
+}
 sub mainmenu {
 	&THELINE;
 	print "Select an option from the menu below:\n";
@@ -45,5 +57,8 @@ sub mainmenu {
 		print "Invalid selection. Try again.\n"; &mainmenu;
 	}
 
+
 }
+&startup;
 &mainmenu;
+
