@@ -18,6 +18,7 @@ my $clear_screen = cls();
 
 
 sub startup {
+	print $clear_screen;
 	&THELINE;
 	print "Poolmanager Manual mining starter & profile tester\n";
 	&THELINE;
