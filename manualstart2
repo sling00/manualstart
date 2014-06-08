@@ -9,7 +9,7 @@ my $conf = &getConfig;
 my %conf = %{$conf};
 my $conffile = "/opt/ifmi/poolmanager.conf";
 #Globals
-sub theline {
+sub THELINE {
 	print "-================================================-\n";
 }
 my $clear_screen = cls();
