@@ -35,7 +35,7 @@ sub mainmenu {
 	print "4. Keccak(Sha3)\t 10. X13 (X13mod miner)\n";
 	print "5. Quark\t 11. Scrypt ChaCha\n";
 	print "6. Scrypt-Jane\t 12. Jackpotcoin\n";
-	print "q - Quit"\n;
+	print "q - Quit\n";
 	my $choice = <>;
 	if ($choice =~ 1) { &optionsmenu;
 	}
