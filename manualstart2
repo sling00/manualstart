@@ -5,18 +5,15 @@ use strict;
 require '/opt/ifmi/pm-common.pl';
 use Term::ANSIScreen qw(cls);
 use YAML qw( DumpFile LoadFile );
-binmode STDOUT, ":utf8";
-#use utf8;
- 
 
-use JSON;
 
-use JSON;
+
+use JSON::XS;
  
 my $json;
 {
   local $/; #Enable 'slurp' mode
-  open my $fh, "<", "manualstart2.conf";
+  open my $fh, "<", "/root/manualstart/manualstart2.conf";
   $json = <$fh>;
   close $fh;
 }
