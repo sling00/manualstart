@@ -37,7 +37,7 @@ sub startup {
 
 sub optionsmenu {
 	print "Options\n";
-my $dasht = $cfg->param('dasht');
+my $dasht = $msconf->param('dasht');
 	print "Dasht is $dasht";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
