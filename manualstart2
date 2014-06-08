@@ -3,31 +3,38 @@
 use warnings;
 use strict;
 require '/opt/ifmi/pm-common.pl';
+use Term::ANSIScreen qw(cls);
+
 my $conf = &getConfig;
 my %conf = %{$conf};
 my $conffile = "/opt/ifmi/poolmanager.conf";
 #Globals
 my $THELINE = (print "-================================================-\n");
+my $clear_screen = cls();
+
 
 
 
 sub startup {
 	$THELINE;
 	print "Poolmanager Manual mining starter & profile tester\n";
+	$THELINE;
+	print "...." ;
+	sleep 5;
+	print $clear_screen;
 }	
 &startup;
-my $continue = <>; chomp $continue;
-	if ($continue =~ m/y(es)?/i)  {
-	print "GOING AHEAD\n";
-	&domenu;
-} else {
-	print "Exiting....";
-	}
-sub domenu {
-print "test\n";
-#my @algos = qw(scrypt scryptn keccak x11 qubit heavy groestl jackpot);
-#foreach $algo (@algos) {
-#	$algo = "\t . $algo";
-#	$algo .= "\n";
-#	}
+
+sub menu {
+	$THELINE;
+	print "Select an option from the menu below:";
+	$THELINE;
+	print "1. Change options\t 7.Start Heavy\n";
+	print "2. scrypt\t  8. X11 (SPH-SGminer)\n";
+	print "3. scrypt-n\t 9. X11 (X11mod miner)\n";
+	print "4. Keccak(Sha3)\t 10. X13 (X13mod miner)\n";
+	print "5. Quark\t 11. Scrypt ChaCha\n";
+	print "6. Scrypt-Jane\t 12. Jackpotcoin\n";
+	print "q - Quit";
 }
+&menu;
