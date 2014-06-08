@@ -27,7 +27,7 @@ sub startup {
 
 sub mainmenu {
 	$THELINE;
-	print "Select an option from the menu below:";
+	print "Select an option from the menu below:"\n;
 	$THELINE;
 	print "1. Change options\t 7.Start Heavy\n";
 	print "2. scrypt\t  8. X11 (SPH-SGminer)\n";
@@ -39,7 +39,7 @@ sub mainmenu {
 	my $choice = <>;
 	if ($choice =~ 1) { &optionsmenu;
 	}
-	elsif ($choice =~ m/q(uit)/i) {
+	elsif ($choice =~ m/q(uit)?/i) {
 	print "Exiting....";
 	} else {
 		print "Invalid selection. Try again.\n"; &mainmenu;
