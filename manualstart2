@@ -15,6 +15,7 @@ sub startup {
 	$THELINE
 	print "Poolmanager Manual mining starter & profile tester\n"
 }	
+&startup;
 my $continue = <>; chomp $continue;
 	if ($continue =~ m/y(es)?/i)  {
 	print "GOING AHEAD\n";
