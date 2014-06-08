@@ -18,7 +18,10 @@ my $clear_screen = cls();
 
 
 my $msconf = new Config::Simple('manualstart2.conf');
-
+my $dasht = $msconf->param('dasht');
+my $extradebug = $msconf->param('extradebug');
+my $mdebug = $msconf->param('debug');
+my $usescreen = $msconf->param('usescreen');
 sub readconf {
   my $msconffile = '/opt/pimp/manualstart.conf';
   if (! -e $msconffile) {
@@ -37,12 +40,10 @@ sub startup {
 
 sub optionsmenu {
 	print "Options\n";
-my $dasht = $msconf->param('dasht');
-	print "Dasht is $dasht";
+	print "Dasht is $dasht\n";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>;
-	
-	if ($coption = 1 ) {
+	if ($coption == 1 ) {
 		print "\nTurning $coption on";
 		&optionsmenu;
 	}
