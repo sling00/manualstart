@@ -6,7 +6,7 @@ require '/opt/ifmi/pm-common.pl';
 use Term::ANSIScreen qw(cls);
 use YAML qw( DumpFile LoadFile );
 binmode STDOUT, ":utf8";
-use utf8;
+#use utf8;
  
 
 use JSON;
