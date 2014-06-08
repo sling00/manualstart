@@ -25,7 +25,7 @@ sub startup {
 }	
 &startup;
 
-sub menu {
+sub mainmenu {
 	$THELINE;
 	print "Select an option from the menu below:";
 	$THELINE;
@@ -35,6 +35,15 @@ sub menu {
 	print "4. Keccak(Sha3)\t 10. X13 (X13mod miner)\n";
 	print "5. Quark\t 11. Scrypt ChaCha\n";
 	print "6. Scrypt-Jane\t 12. Jackpotcoin\n";
-	print "q - Quit";
+	print "q - Quit"\n;
+	my $choice = <>;
+	if ($choice =~ 1) { &optionsmenu;
+	}
+	elsif ($choice =~ m/q(uit)/i) {
+	print "Exiting....";
+	} else {
+		print "Invalid selection. Try again.\n"; &mainmenu;
+	}
+
 }
-&menu;
+&mainmenu;
