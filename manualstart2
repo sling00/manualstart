@@ -44,7 +44,7 @@ sub optionsmenu {
 	print "1. ($dasht) Dasht\n";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>; chomp $coption; print "\n";
-	if (($coption = ~/\d/) && ($coption >= 0) && ($coption < 5)) {
+	if (($coption=~/\d/) && ($coption >= 0) && ($coption < 5)) {
 
 		if ($coption == 1 ) {
 				if  ($dasht eq "On") {
