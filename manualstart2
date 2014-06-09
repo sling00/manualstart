@@ -18,19 +18,14 @@ my $clear_screen = cls();
 
 
 my $msconf = new Config::Simple('manualstart2.conf');
-my $dasht = $msconf->param('dasht');
-my $extradebug = $msconf->param('extradebug');
-my $mdebug = $msconf->param('debug');
-my $usescreen = $msconf->param('usescreen');
+
 sub readconf {
-  my $msconffile = '/opt/pimp/manualstart.conf';
-  if (! -e $msconffile) {
-    exec('/usr/lib/cgi-bin/config.pl');
-  } 
-  my $c;
-  $c = LoadFile($msconffile);
-  return($c);
+	my $dasht = $msconf->param('dasht');
+	my $extradebug = $msconf->param('extradebug');
+	my $mdebug = $msconf->param('debug');
+	my $usescreen = $msconf->param('usescreen');
 }
+
 sub startup {
 	print $clear_screen;
 	&THELINE;
@@ -64,7 +59,7 @@ sub optionsmenu {
 	}
 	elsif ($coption =~ m/d(one)?/i) {
 		&mainmenu;
-	}else {
+	} else {
 		print "\nInvalid selection. Try again.\n"; &optionsmenu;
 	}
 
