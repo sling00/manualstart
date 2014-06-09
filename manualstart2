@@ -44,29 +44,31 @@ sub optionsmenu {
 	print "1. ($dasht) Dasht\n";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>; chomp $coption; print "\n";
-	if ($coption == 1 ) {
-			if  ($dasht eq "On") {
-				print "\nTurning -T Off\n";
-				$msconf->param('dasht', 'Off');
-			}
-			elsif ($dasht eq "Off") {
-				print "\nTurning -T on\n";
-				$msconf->param('dasht', 'On');
-			}
-		$msconf->save();
-		&readconf;
-		&optionsmenu;
-	}
-	elsif ($coption == 2 ) {
-		print "\nTurning $coption off";
-		&optionsmenu;
-	}
-	elsif ($coption =~ m/d(one)?/i) {
+	if(($coption=~/\d/) && ($num >= 0) && ($num < 13)) {
+
+		if ($coption == 1 ) {
+				if  ($dasht eq "On") {
+					print "\nTurning -T Off\n";
+					$msconf->param('dasht', 'Off');
+				}
+				elsif ($dasht eq "Off") {
+					print "\nTurning -T on\n";
+					$msconf->param('dasht', 'On');
+				}
+			$msconf->save();
+			&readconf;
+			&optionsmenu;
+		}
+		elsif ($coption == 2 ) {
+			print "\nTurning $coption off";
+			&optionsmenu;
+		}
+		}	
+	if ($coption =~ m/d(one)?/i) {
 		&mainmenu;
 	} else {
-		print "\nInvalid selection. Try again.\n"; &optionsmenu;
+			print "\nInvalid selection. Try again.\n"; &optionsmenu;
 	}
-
 }
 sub mainmenu {
 	&THELINE;
