@@ -39,19 +39,28 @@ sub startup {
 }	
 
 sub optionsmenu {
+	&THELINE;
 	print "Options\n";
+	&THELINE;
 	print "Dasht is $dasht\n";
 	print "or done to return to the main menu.\n";
-	print "Change option #: "; my $coption = <>;
+	print "Change option #: "; my $coption = <>; print "\n";
 	if ($coption == 1 ) {
-		print "\nTurning $coption on";
+			if  ($dasht eq "On") {
+				print "\nTurning -T Off\n";
+				$msconf->param('dasht', 'Off');
+			}
+			elsif ($dasht eq "Off") {
+				print "\nTurning -T on\n";
+				$msconf->param('dasht', 'On');
+			}
 		&optionsmenu;
 	}
-	elsif ($coption = 2 ) {
+	elsif ($coption == 2 ) {
 		print "\nTurning $coption off";
 		&optionsmenu;
 	}
-	elsif ($coption = m/d(one)?/i) {
+	elsif ($coption ~= m/d(one)?/i) {
 		&mainmenu;
 	}else {
 		print "\nInvalid selection. Try again.\n"; &optionsmenu;
@@ -77,8 +86,11 @@ sub mainmenu {
 	} else {
 		print "Invalid selection. Try again.\n"; &mainmenu;
 	}
+}
 
-
+sun runminer {
+	print "Starting miner with $moptions\n"
+	print "Command line syntax saved to /root/manualstart.run for easy reuse."
 }
 &startup;
 &mainmenu;
