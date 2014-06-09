@@ -67,7 +67,7 @@ sub optionsmenu {
 	if ($coption =~ m/d(one)?/i) {
 		&mainmenu;
 	} else {
-			print "\nInvalid selection. Try again.\n"; &optionsmenu;
+			print "\n \"$coption\" is an Invalid selection. Try again.\n"; &optionsmenu;
 	}
 }
 sub mainmenu {
