@@ -90,8 +90,8 @@ sub mainmenu {
 }
 
 sun runminer {
-	print "Starting miner with $moptions\n"
-	print "Command line syntax saved to /root/manualstart.run for easy reuse."
+	print "Starting miner with $moptions\n";
+	print "Command line syntax saved to /root/manualstart.run for easy reuse.";
 }
 &startup;
 &mainmenu;
