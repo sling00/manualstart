@@ -90,6 +90,7 @@ sub mainmenu {
 }
 
 sun runminer {
+	my $moptinos = "-T --debug";
 	print "Starting miner with $moptions\n";
 	print "Command line syntax saved to /root/manualstart.run for easy reuse.";
 }
