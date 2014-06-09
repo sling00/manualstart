@@ -81,7 +81,7 @@ sub mainmenu {
 	print "5. Quark\t 11. Scrypt ChaCha\n";
 	print "6. Scrypt-Jane\t 12. Jackpotcoin\n";
 	print "q - Quit\n";
-	print "My Choice: "; my $choice = <>;
+	print "My Choice: "; my $choice = <>; chomp $choice; print "\n";
 	if(($choice = ~/\d/) && ($choice >= 0) && ($choice < 13)) {
 		if ($choice == 1) { &optionsmenu;
 		}
