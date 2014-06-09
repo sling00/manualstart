@@ -18,7 +18,10 @@ my $clear_screen = cls();
 
 
 my $msconf = new Config::Simple('manualstart2.conf');
-
+	my $dasht = $msconf->param('dasht');
+	my $extradebug = $msconf->param('extradebug');
+	my $mdebug = $msconf->param('debug');
+	my $usescreen = $msconf->param('usescreen');
 sub readconf {
 	my $dasht = $msconf->param('dasht');
 	my $extradebug = $msconf->param('extradebug');
