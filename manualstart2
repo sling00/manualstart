@@ -47,6 +47,7 @@ sub optionsmenu {
 	print "Change option #: "; my $coption = <>; print "\n";
 	if ($coption == 1 ) {
 			if  ($dasht eq "On") {
+				my $dasht = "Off";
 				print "\nTurning -T Off\n";
 				$msconf->param('dasht', 'Off');
 			}
@@ -60,7 +61,7 @@ sub optionsmenu {
 		print "\nTurning $coption off";
 		&optionsmenu;
 	}
-	elsif ($coption ~= m/d(one)?/i) {
+	elsif ($coption =~ m/d(one)?/i) {
 		&mainmenu;
 	}else {
 		print "\nInvalid selection. Try again.\n"; &optionsmenu;
