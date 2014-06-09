@@ -37,11 +37,11 @@ sub startup {
 }	
 
 sub optionsmenu {
-	&readconf;
+	#&readconf;
 	&THELINE;
-	print "Options\n";
+	print "Miner Options Options\n";
 	&THELINE;
-	print "Dasht is $dasht\n";
+	print "1. ($dasht) Dasht\n";
 	print "or done to return to the main menu.\n";
 	print "Change option #: "; my $coption = <>; print "\n";
 	if ($coption == 1 ) {
