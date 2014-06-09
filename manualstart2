@@ -43,8 +43,8 @@ sub optionsmenu {
 	&THELINE;
 	print "1. ($dasht) Dasht\n";
 	print "or done to return to the main menu.\n";
-	print "Change option #: "; my $coption = <>; print "\n";
-	if ($coption = 1 ) {
+	print "Change option #: "; my $coption = <>; chomp $coption; print "\n";
+	if ($coption == 1 ) {
 			if  ($dasht eq "On") {
 				print "\nTurning -T Off\n";
 				$msconf->param('dasht', 'Off');
@@ -57,7 +57,7 @@ sub optionsmenu {
 		&readconf;
 		&optionsmenu;
 	}
-	elsif ($coption = 2 ) {
+	elsif ($coption == 2 ) {
 		print "\nTurning $coption off";
 		&optionsmenu;
 	}
