@@ -51,7 +51,7 @@ sub optionsmenu {
 				$msconf->param('dasht', 'On');
 			}
 		$msconf->save();
-		&readconf
+		&readconf;
 		&optionsmenu;
 	}
 	elsif ($coption == 2 ) {
