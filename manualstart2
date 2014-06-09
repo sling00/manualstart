@@ -34,6 +34,7 @@ sub startup {
 }	
 
 sub optionsmenu {
+	&readconf;
 	&THELINE;
 	print "Options\n";
 	&THELINE;
@@ -42,7 +43,6 @@ sub optionsmenu {
 	print "Change option #: "; my $coption = <>; print "\n";
 	if ($coption == 1 ) {
 			if  ($dasht eq "On") {
-				my $dasht = "Off";
 				print "\nTurning -T Off\n";
 				$msconf->param('dasht', 'Off');
 			}
@@ -51,6 +51,7 @@ sub optionsmenu {
 				$msconf->param('dasht', 'On');
 			}
 		$msconf->save();
+		&readconf
 		&optionsmenu;
 	}
 	elsif ($coption == 2 ) {
