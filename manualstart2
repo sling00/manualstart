@@ -55,6 +55,7 @@ sub optionsmenu {
 				print "\nTurning -T on\n";
 				$msconf->param('dasht', 'On');
 			}
+		$cfg->save();
 		&optionsmenu;
 	}
 	elsif ($coption == 2 ) {
@@ -89,7 +90,7 @@ sub mainmenu {
 	}
 }
 
-sun runminer {
+sub runminer {
 	my $moptions = "-T --debug";
 	print "Starting miner with $moptions\n";
 	print "Command line syntax saved to /root/manualstart.run for easy reuse.";
